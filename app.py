@@ -313,9 +313,9 @@ with st.sidebar:
     # File upload section
     st.markdown("#### 📁 Data Upload")
     uploaded_file = st.file_uploader(
-        "Choose a CSV file",
-        type=["csv"],
-        help="Upload your dataset in CSV format"
+        "Choose a CSV, Excel (.xlsx, .xls, .xlsb) file",
+        type=["csv", "xlsx", "xls", "xlsb"],
+        help="Upload your dataset in CSV, XLSX, XLS, or XLSB format"
     )
     
     if uploaded_file is not None:
@@ -459,27 +459,45 @@ with st.sidebar:
 
 # Main content area
 if uploaded_file is not None:
-    # File processing with better error handling
+    import os
+    file_name = uploaded_file.name.lower()
     try:
-        # Try UTF-8 first
-        df = pd.read_csv(uploaded_file, encoding='utf-8')
-    except UnicodeDecodeError:
-        try:
-            # Try latin-1 encoding
-            df = pd.read_csv(uploaded_file, encoding='latin-1')
-        except UnicodeDecodeError:
-            # Try cp1252 encoding (Windows default)
-            df = pd.read_csv(uploaded_file, encoding='cp1252')
-    except Exception as e:
-        # If all encodings fail, try with different delimiters
-        try:
-            df = pd.read_csv(uploaded_file, sep=';', encoding='utf-8')
-        except:
+        if file_name.endswith('.csv'):
             try:
-                df = pd.read_csv(uploaded_file, sep='\t', encoding='utf-8')
-            except:
-                st.error("❌ Could not read the file. Please check if it's a valid CSV file.")
+                df = pd.read_csv(uploaded_file, encoding='utf-8')
+            except UnicodeDecodeError:
+                try:
+                    df = pd.read_csv(uploaded_file, encoding='latin-1')
+                except UnicodeDecodeError:
+                    df = pd.read_csv(uploaded_file, encoding='cp1252')
+            except Exception:
+                try:
+                    df = pd.read_csv(uploaded_file, sep=';', encoding='utf-8')
+                except:
+                    try:
+                        df = pd.read_csv(uploaded_file, sep='\t', encoding='utf-8')
+                    except:
+                        st.error("❌ Could not read the file. Please check if it's a valid CSV file.")
+                        st.stop()
+        elif file_name.endswith('.xlsb'):
+            try:
+                import pyxlsb
+                df = pd.read_excel(uploaded_file, engine='pyxlsb')
+            except Exception as e:
+                st.error(f"❌ Could not read the XLSB file: {e}")
                 st.stop()
+        elif file_name.endswith('.xlsx') or file_name.endswith('.xls'):
+            try:
+                df = pd.read_excel(uploaded_file)
+            except Exception as e:
+                st.error(f"❌ Could not read the Excel file: {e}")
+                st.stop()
+        else:
+            st.error("❌ Unsupported file type. Please upload a CSV, XLSX, XLS, or XLSB file.")
+            st.stop()
+    except Exception as e:
+        st.error(f"❌ Could not read the file: {e}")
+        st.stop()
     
     # Dataset overview
     st.markdown('<div class="section-header"><h3>📋 Dataset Overview</h3></div>', unsafe_allow_html=True)

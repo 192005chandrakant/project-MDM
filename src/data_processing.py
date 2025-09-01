@@ -1,4 +1,5 @@
 import pandas as pd
+# Now supports .xlsb files via pyxlsb (see app.py for file loading)
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA

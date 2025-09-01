@@ -1,4 +1,5 @@
 import pandas as pd
+# Data loading supports .xlsb via pyxlsb (see app.py)
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
