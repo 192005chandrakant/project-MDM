@@ -372,44 +372,6 @@ with st.sidebar:
             </div>
             """, unsafe_allow_html=True)
         
-        # Show method explanation
-        if method == "Principal Component Analysis (PCA)":
-            st.markdown("""
-            <div class="feature-box">
-                <h4>🔬 Principal Component Analysis (PCA)</h4>
-                <p><strong>What it does:</strong> Reduces dimensions while preserving maximum variance</p>
-                <p><strong>Best for:</strong> High-dimensional data with correlated features</p>
-                <p><strong>Output:</strong> Principal components (linear combinations of original features)</p>
-            </div>
-            """, unsafe_allow_html=True)
-        elif method == "Chi-Square Feature Selection":
-            st.markdown("""
-            <div class="feature-box">
-                <h4>📊 Chi-Square Feature Selection</h4>
-                <p><strong>What it does:</strong> Selects features based on statistical significance</p>
-                <p><strong>Best for:</strong> Categorical target variables</p>
-                <p><strong>Output:</strong> Top-k most statistically significant features</p>
-            </div>
-            """, unsafe_allow_html=True)
-        elif method == "Recursive Feature Elimination (RFE)":
-            st.markdown("""
-            <div class="feature-box">
-                <h4>🔄 Recursive Feature Elimination (RFE)</h4>
-                <p><strong>What it does:</strong> Iteratively removes least important features</p>
-                <p><strong>Best for:</strong> When you have a good base model</p>
-                <p><strong>Output:</strong> Optimal feature subset based on model performance</p>
-            </div>
-            """, unsafe_allow_html=True)
-        elif method == "Mutual Information Feature Selection":
-            st.markdown("""
-            <div class="feature-box">
-                <h4>🔗 Mutual Information Feature Selection</h4>
-                <p><strong>What it does:</strong> Selects features based on mutual information with target</p>
-                <p><strong>Best for:</strong> Non-linear relationships between features and target</p>
-                <p><strong>Output:</strong> Features with highest mutual information scores</p>
-            </div>
-            """, unsafe_allow_html=True)
-        
         # Number of features/components
         st.markdown("#### 📊 Parameters")
         n_features = st.slider(
@@ -586,14 +548,14 @@ if uploaded_file is not None:
             st.pyplot(fig)
             
             # Download button for distribution plot
-            if st.button("📥 Download Distribution Plot", key="download_dist"):
-                img_str = fig_to_base64(fig)
-                st.download_button(
-                    label="⬇️ Download PNG",
-                    data=base64.b64decode(img_str),
-                    file_name="feature_distribution.png",
-                    mime="image/png"
-                )
+            img_str = fig_to_base64(fig)
+            st.download_button(
+                label="📥 Download Distribution Plot",
+                data=base64.b64decode(img_str),
+                file_name="feature_distribution.png",
+                mime="image/png",
+                key="download_dist"
+            )
         
         with tab2:
             # Correlation matrix
@@ -605,14 +567,14 @@ if uploaded_file is not None:
             st.pyplot(fig)
             
             # Download button for correlation plot
-            if st.button("📥 Download Correlation Plot", key="download_corr"):
-                img_str = fig_to_base64(fig)
-                st.download_button(
-                    label="⬇️ Download PNG",
-                    data=base64.b64decode(img_str),
-                    file_name="correlation_matrix.png",
-                    mime="image/png"
-                )
+            img_str = fig_to_base64(fig)
+            st.download_button(
+                label="📥 Download Correlation Plot",
+                data=base64.b64decode(img_str),
+                file_name="correlation_matrix.png",
+                mime="image/png",
+                key="download_corr"
+            )
         
         with tab3:
             # Feature statistics
@@ -654,14 +616,14 @@ if uploaded_file is not None:
                         st.pyplot(fig)
                         
                         # Download button for PCA plot
-                        if st.button("📥 Download PCA Plot", key="download_pca"):
-                            img_str = fig_to_base64(fig)
-                            st.download_button(
-                                label="⬇️ Download PNG",
-                                data=base64.b64decode(img_str),
-                                file_name="pca_explained_variance.png",
-                                mime="image/png"
-                            )
+                        img_str = fig_to_base64(fig)
+                        st.download_button(
+                            label="📥 Download PCA Plot",
+                            data=base64.b64decode(img_str),
+                            file_name="pca_explained_variance.png",
+                            mime="image/png",
+                            key="download_pca"
+                        )
                     
                     with col2:
                         st.markdown("#### 📈 Variance Breakdown")

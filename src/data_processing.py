@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import SelectKBest, chi2, RFE, mutual_info_classif
 from sklearn.linear_model import LogisticRegression
+from sklearn.impute import SimpleImputer
 
 def preprocess_data(df, target_col):
     """
@@ -20,8 +21,12 @@ def preprocess_data(df, target_col):
     
     X_numeric = X[numeric_columns]
     
+    # Impute missing values
+    imputer = SimpleImputer(strategy='mean')
+    X_imputed = imputer.fit_transform(X_numeric)
+    
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_numeric)
+    X_scaled = scaler.fit_transform(X_imputed)
 
     return X_scaled, y, X_numeric.columns
 
